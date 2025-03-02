@@ -1,7 +1,14 @@
 const { ipcMain } = require("electron");
 const { app, BrowserWindow } = require("electron/main");
 const path = require("node:path");
-const { names } = require("./models/dbmgr");
+const {
+  names,
+  getFolders,
+  getPlatformNames,
+  handleAddPlatform,
+  addNoteToPlatformTable,
+  getNotesFromPlatformTable,
+} = require("./models/dbmgr");
 
 const isDev = 1;
 
@@ -31,6 +38,27 @@ app.whenReady().then(() => {
   ipcMain.handle("get-names", async () => {
     return await names();
   });
+
+  ipcMain.handle("get-folders", async () => {
+    return await getFolders();
+  });
+
+  ipcMain.handle("get-platformNames", async () => {
+    return await getPlatformNames();
+  });
+
+  ipcMain.handle("add-platform", async (event, newPlatform) => {
+    return await handleAddPlatform(event, newPlatform);
+  });
+
+  ipcMain.handle("add-note", async (event, note) => {
+    return await addNoteToPlatformTable(event, note);
+  });
+
+  ipcMain.handle("get-platformNotes", async (event, platform) => {
+    return await getNotesFromPlatformTable(event, platform);
+  });
+
   createWindow();
 
   app.on("activate", () => {

@@ -1,28 +1,18 @@
 import "./App.css";
-import { useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./pages/HomePage.js";
 
 function App() {
-  const [names, setNames] = useState("");
-
-  const handleClick = async () => {
-    try {
-      const res = await window.api.getNames();
-      console.log(res);
-      let newNames = res
-        .map((elem) => {
-          return elem.name;
-        })
-        .join(",");
-      setNames(newNames);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <HomePage />,
+    },
+  ]);
 
   return (
     <>
-      <button onClick={handleClick}>click</button>
-      <div>{names}</div>
+      <RouterProvider router={router} />
     </>
   );
 }
